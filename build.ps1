@@ -22,6 +22,23 @@ param (
 	$PublishReadyToRun = $False
 )
 
+function Get-MSBuildPath {
+	$cmd = Get-Command msbuild -ErrorAction SilentlyContinue
+	if ( $cmd ) {
+		return $cmd.Source
+	}
+
+	$vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+	if ( Test-Path $vswhere ) {
+		$found = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1
+		if ( $found -and ( Test-Path $found ) ) {
+			return $found
+		}
+	}
+
+	throw 'MSBuild not found. Install Visual Studio with the C++ desktop workload, or open a Developer PowerShell.'
+}
+
 Push-Location (Split-Path $MyInvocation.MyCommand.Path -Parent)
 
 if ( Test-Path -Path $OutputPath ) {
@@ -72,11 +89,13 @@ if ( -Not ( Test-Path ".\Netch\bin\$Configuration" ) ) {
 }
 cp -Force ".\Netch\bin\$Configuration\Netch.exe" $OutputPath
 
+$MSBuild = Get-MSBuildPath
+
 if ( -Not ( Test-Path ".\Redirector\bin\$Configuration" ) ) {
 	Write-Host
 	Write-Host 'Building Redirector'
 
-	msbuild `
+	& $MSBuild `
 		-property:Configuration=$Configuration `
 		-property:Platform=x64 `
 		'.\Redirector\Redirector.vcxproj'
@@ -89,7 +108,7 @@ if ( -Not ( Test-Path ".\RouteHelper\bin\$Configuration" ) ) {
 	Write-Host
 	Write-Host 'Building RouteHelper'
 
-	msbuild `
+	& $MSBuild `
 		-property:Configuration=$Configuration `
 		-property:Platform=x64 `
 		'.\RouteHelper\RouteHelper.vcxproj'

@@ -279,6 +279,9 @@ CI 用 `sha256.ps1` + `actions/cache@v3` 做同样的跳过，逻辑一致。
 单独重编附属组件：
 
 ```powershell
+$env:http_proxy="socks5://127.0.0.1:10808"
+$env:https_proxy="socks5://127.0.0.1:10808"
+Set-ExecutionPolicy Bypass -Scope Process
 .\Other\clean.ps1
 .\Other\build.ps1
 ```
