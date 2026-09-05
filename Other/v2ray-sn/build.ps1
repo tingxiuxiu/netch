@@ -1,6 +1,6 @@
 Set-Location (Split-Path $MyInvocation.MyCommand.Path -Parent)
 
-git clone https://github.com/SagerNet/v2ray-core.git -b 'v5.0.16' src
+git clone --depth 1 https://github.com/SagerNet/v2ray-core.git -b 'v5.0.16' src
 if ( -Not $? ) {
     exit $lastExitCode
 }
@@ -18,12 +18,18 @@ Remove-Item '.\common\buf\readv_reader.go'
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/SagerNet/v2ray-core/2711fd1/common/buf/io.go' -OutFile '.\common\buf\io.go'
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/SagerNet/v2ray-core/2711fd1/common/buf/readv_reader.go' -OutFile '.\common\buf\readv_reader.go'
 
-$Env:CGO_ENABLED='0'
-$Env:GOROOT_FINAL='/usr'
+$Env:CGO_ENABLED = '0'
+$Env:GOROOT_FINAL = '/usr'
+$Env:GOOS = 'windows'
+$Env:GOARCH = 'amd64'
+# v5.0.16 is a Go 1.18 tree. Do not `go get -u`: 2026 module latest
+# (quic-go rename, sing/gvisor splits) cannot compile this snapshot.
+$Env:GOTOOLCHAIN = 'go1.18.10'
+$Env:GOPROXY = 'https://proxy.golang.org,direct'
 
-$Env:GOOS='windows'
-$Env:GOARCH='amd64'
-go get -u ./...
+go get github.com/Dreamacro/clash@v1.11.4
+if ( -Not $? ) { exit $lastExitCode }
 go mod tidy
+if ( -Not $? ) { exit $lastExitCode }
 go build -a -trimpath -asmflags '-s -w' -ldflags '-s -w -buildid=' -o '..\..\release\v2ray-sn.exe' '.\main'
 exit $lastExitCode
