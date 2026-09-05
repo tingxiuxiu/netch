@@ -1,5 +1,6 @@
 using System.Net;
 using Netch.Properties;
+using Netch.Ui;
 using Netch.Utils;
 
 namespace Netch.Forms;
@@ -243,7 +244,7 @@ public partial class SettingForm : BindingForm
 
     private async void ControlButton_Click(object sender, EventArgs e)
     {
-        Utils.Utils.ComponentIterator(this, component => Utils.Utils.ChangeControlForeColor(component, Color.Black));
+        Utils.Utils.ComponentIterator(this, component => Utils.Utils.ChangeControlForeColor(component, MdColors.OnSurface));
 
         #region Check
 

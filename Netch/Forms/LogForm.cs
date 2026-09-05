@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.WindowsAndMessaging;
+using Netch.Ui;
 using static Windows.Win32.PInvoke;
 
 namespace Netch.Forms;
 
 [Fody.ConfigureAwait(true)]
-public partial class LogForm : Form
+public partial class LogForm : MdForm
 {
     private readonly Form _parent;
 

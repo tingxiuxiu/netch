@@ -1,10 +1,11 @@
 ﻿using Netch.Properties;
+using Netch.Ui;
 using Netch.Utils;
 
 namespace Netch.Forms;
 
 [Fody.ConfigureAwait(true)]
-public partial class AboutForm : Form
+public partial class AboutForm : MdForm
 {
     public AboutForm()
     {

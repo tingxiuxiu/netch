@@ -102,8 +102,10 @@ public static class Program
         Application.ApplicationExit += Application_OnExit;
 
         Application.SetHighDpiMode(HighDpiMode.DpiUnawareGdiScaled);
+        Application.SetColorMode(SystemColorMode.Classic);
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
+        Application.SetDefaultFont(Ui.MdFonts.Body);
         Application.Run(Global.MainForm);
     }
 

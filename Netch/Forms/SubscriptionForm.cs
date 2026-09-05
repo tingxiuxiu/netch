@@ -1,11 +1,12 @@
 ﻿using Netch.Models;
 using Netch.Properties;
+using Netch.Ui;
 using Netch.Utils;
 
 namespace Netch.Forms;
 
 [Fody.ConfigureAwait(true)]
-public partial class SubscriptionForm : Form
+public partial class SubscriptionForm : MdForm
 {
     public SubscriptionForm()
     {

@@ -14,12 +14,13 @@ using Netch.Models;
 using Netch.Models.Modes;
 using Netch.Properties;
 using Netch.Services;
+using Netch.Ui;
 using Netch.Utils;
 
 namespace Netch.Forms;
 
 [Fody.ConfigureAwait(true)]
-public partial class MainForm : Form
+public partial class MainForm : MdForm
 {
     #region Start
 
@@ -104,7 +105,6 @@ public partial class MainForm : Form
     {
         _numberBoxWidth = ServerComboBox.Width / 10;
         _numberBoxX = _numberBoxWidth * 9;
-        _numberBoxWrap = _numberBoxWidth / 30;
 
         _configurationGroupBoxHeight = ConfigurationGroupBox.Height;
         _profileConfigurationHeight = ConfigurationGroupBox.Controls[0].Height / 3; // 因为 AutoSize, 所以得到的是Controls的总高度
@@ -1127,10 +1127,10 @@ public partial class MainForm : Form
             NatTypeStatusLightLabel.Visible = Flags.IsWindows10Upper;
             var c = natType switch
             {
-                1 => Color.LimeGreen,
-                2 => Color.Yellow,
-                3 => Color.Red,
-                4 => Color.Black,
+                1 => MdColors.Success,
+                2 => MdColors.Caution,
+                3 => MdColors.Error,
+                4 => MdColors.OnSurface,
                 _ => throw new ArgumentOutOfRangeException(nameof(natType), natType, null)
             };
 
@@ -1416,59 +1416,56 @@ public partial class MainForm : Form
 
     #region ComboBox_DrawItem
 
-    private readonly SolidBrush _greenBrush = new(Color.FromArgb(50, 255, 56));
     private int _numberBoxWidth;
     private int _numberBoxX;
-    private int _numberBoxWrap;
 
     private void ComboBox_DrawItem(object sender, DrawItemEventArgs e)
     {
         if (sender is not ComboBox cbx)
             return;
 
-        // 绘制背景颜色
-        e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+        var selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+        MdTheme.DrawComboItemBackground(e.Graphics, e.Bounds, selected);
 
         if (e.Index < 0)
             return;
 
-        // 绘制 备注/名称 字符串
-        TextRenderer.DrawText(e.Graphics, cbx.Items[e.Index].ToString(), cbx.Font, e.Bounds, Color.Black, TextFormatFlags.Left);
+        var textColor = selected ? MdColors.OnSecondaryContainer : MdColors.OnSurface;
+        TextRenderer.DrawText(e.Graphics, cbx.Items[e.Index].ToString(), cbx.Font, e.Bounds, textColor, TextFormatFlags.Left);
 
         switch (cbx.Items[e.Index])
         {
             case Server item:
             {
-                // 计算延迟底色
-                var numBoxBackBrush = item.Delay switch { > 200 => Brushes.Red, > 80 => Brushes.Yellow, >= 0 => _greenBrush, _ => Brushes.Gray };
+                var chip = item.Delay switch
+                {
+                    > 200 => MdColors.ErrorContainer,
+                    > 80 => MdColors.Caution,
+                    >= 0 => MdColors.Success,
+                    _ => MdColors.SurfaceVariant
+                };
+                var chipText = item.Delay switch
+                {
+                    > 200 => MdColors.OnError,
+                    > 80 => MdColors.OnTertiaryContainer,
+                    >= 0 => Color.White,
+                    _ => MdColors.OnSurfaceVariant
+                };
 
-                // 绘制延迟底色
-                e.Graphics.FillRectangle(numBoxBackBrush, _numberBoxX, e.Bounds.Y, _numberBoxWidth, e.Bounds.Height);
+                var chipRect = new Rectangle(_numberBoxX + 2, e.Bounds.Y + 2, _numberBoxWidth - 4, e.Bounds.Height - 4);
+                using (var path = MdShapes.RoundedRect(chipRect, MdShapes.ChipRadius))
+                using (var brush = new SolidBrush(chip))
+                {
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    e.Graphics.FillPath(brush, path);
+                }
 
-                // 绘制延迟字符串
                 TextRenderer.DrawText(e.Graphics,
                     item.Delay.ToString(),
                     cbx.Font,
-                    new Point(_numberBoxX + _numberBoxWrap, e.Bounds.Y),
-                    Color.Black,
-                    TextFormatFlags.Left);
-
-                break;
-            }
-            case Mode item:
-            {
-                /*
-                // 绘制 模式Box 底色
-                e.Graphics.FillRectangle(Brushes.Gray, _numberBoxX, e.Bounds.Y, _numberBoxWidth, e.Bounds.Height);
-
-                // 绘制 模式行数 字符串
-                TextRenderer.DrawText(e.Graphics,
-                    item.Content.Count.ToString(),
-                    cbx.Font,
-                    new Point(_numberBoxX + _numberBoxWrap, e.Bounds.Y),
-                    Color.Black,
-                    TextFormatFlags.Left);
-                    */
+                    chipRect,
+                    chipText,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
                 break;
             }

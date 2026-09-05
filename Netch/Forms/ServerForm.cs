@@ -2,13 +2,14 @@
 using System.ComponentModel;
 using Netch.Models;
 using Netch.Properties;
+using Netch.Ui;
 using Netch.Utils;
 
 namespace Netch.Forms;
 
 [DesignerCategory(@"Code")]
 [Fody.ConfigureAwait(true)]
-public abstract class ServerForm : Form
+public abstract class ServerForm : MdForm
 {
     private const int ControlLineHeight = 28;
     private const int InputBoxWidth = 294;
@@ -172,11 +173,11 @@ public abstract class ServerForm : Form
         _controlLines++;
         var control = new Button
         {
-            Location = new Point(340, _controlLines * ControlLineHeight + 10),
+            Location = new Point(332, _controlLines * ControlLineHeight + 10),
             Name = "ControlButton",
-            Size = new Size(75, 23),
+            Size = new Size(88, 36),
             Text = "Save",
-            UseVisualStyleBackColor = true
+            UseVisualStyleBackColor = false
         };
 
         control.Click += ControlButton_Click;
@@ -185,12 +186,12 @@ public abstract class ServerForm : Form
 
     private void ControlButton_Click(object sender, EventArgs e)
     {
-        Utils.Utils.ComponentIterator(this, component => Utils.Utils.ChangeControlForeColor(component, Color.Black));
+        Utils.Utils.ComponentIterator(this, component => Utils.Utils.ChangeControlForeColor(component, MdColors.OnSurface));
 
         var flag = true;
         foreach (var pair in _checkActions.Where(pair => !pair.Value.Invoke(pair.Key.Text)))
         {
-            Utils.Utils.ChangeControlForeColor(pair.Key, Color.Red);
+            Utils.Utils.ChangeControlForeColor(pair.Key, MdColors.Error);
             flag = false;
         }
 
@@ -313,7 +314,7 @@ public abstract class ServerForm : Form
         AutoSizeMode = AutoSizeMode.GrowAndShrink;
         ClientSize = new Size(444, 137);
         Controls.Add(ConfigurationGroupBox);
-        Font = new Font("微软雅黑", 9F, FontStyle.Regular, GraphicsUnit.Point, 134);
+        Font = MdFonts.Body;
         FormBorderStyle = FormBorderStyle.FixedSingle;
         Icon = Icon.FromHandle(Resources.Netch.GetHicon());
         Margin = new Padding(3, 4, 3, 4);

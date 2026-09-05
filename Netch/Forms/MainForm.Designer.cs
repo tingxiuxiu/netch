@@ -107,7 +107,7 @@
             // 
             // MenuStrip
             // 
-            this.MenuStrip.BackColor = System.Drawing.SystemColors.Control;
+            this.MenuStrip.BackColor = System.Drawing.Color.FromArgb(248, 241, 246);
             this.MenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ServerToolStripMenuItem,
@@ -435,7 +435,7 @@
             // 
             // EditServerPictureBox
             // 
-            this.EditServerPictureBox.BackColor = System.Drawing.SystemColors.Control;
+            this.EditServerPictureBox.BackColor = System.Drawing.Color.Transparent;
             this.EditServerPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
             this.EditServerPictureBox.Image = global::Netch.Properties.Resources.edit;
             this.EditServerPictureBox.Location = new System.Drawing.Point(3, 3);
@@ -606,9 +606,9 @@
             // ControlButton
             // 
             this.ControlButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ControlButton.Location = new System.Drawing.Point(631, 3);
+            this.ControlButton.Location = new System.Drawing.Point(607, 4);
             this.ControlButton.Name = "ControlButton";
-            this.ControlButton.Size = new System.Drawing.Size(75, 27);
+            this.ControlButton.Size = new System.Drawing.Size(96, 40);
             this.ControlButton.TabIndex = 3;
             this.ControlButton.Text = "Start";
             this.ControlButton.UseVisualStyleBackColor = true;
@@ -648,9 +648,9 @@
             // SettingsButton
             // 
             this.SettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SettingsButton.Location = new System.Drawing.Point(1, 3);
+            this.SettingsButton.Location = new System.Drawing.Point(1, 4);
             this.SettingsButton.Name = "SettingsButton";
-            this.SettingsButton.Size = new System.Drawing.Size(72, 27);
+            this.SettingsButton.Size = new System.Drawing.Size(96, 40);
             this.SettingsButton.TabIndex = 4;
             this.SettingsButton.Text = "Settings";
             this.SettingsButton.UseVisualStyleBackColor = true;
@@ -690,8 +690,9 @@
             this.flowLayoutPanel1.Controls.Add(this.ProfileGroupBox);
             this.flowLayoutPanel1.Controls.Add(this.ButtomControlContainerControl);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 29);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(16, 36);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(4, 8, 4, 4);
             this.flowLayoutPanel1.Size = new System.Drawing.Size(715, 256);
             this.flowLayoutPanel1.TabIndex = 14;
             // 
@@ -712,11 +713,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.BackColor = System.Drawing.Color.FromArgb(254, 251, 255);
             this.ClientSize = new System.Drawing.Size(740, 294);
             this.Controls.Add(this.MenuStrip);
             this.Controls.Add(this.StatusStrip);
             this.Controls.Add(this.flowLayoutPanel1);
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;

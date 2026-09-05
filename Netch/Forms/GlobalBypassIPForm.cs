@@ -1,11 +1,12 @@
 ﻿using System.Net;
 using Netch.Properties;
+using Netch.Ui;
 using Netch.Utils;
 
 namespace Netch.Forms;
 
 [Fody.ConfigureAwait(true)]
-public partial class GlobalBypassIPForm : Form
+public partial class GlobalBypassIPForm : MdForm
 {
     public GlobalBypassIPForm()
     {

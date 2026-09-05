@@ -1,9 +1,10 @@
 ﻿using Netch.Models;
+using Netch.Ui;
 
 namespace Netch.Forms;
 
 [Fody.ConfigureAwait(true)]
-public class BindingForm : Form
+public class BindingForm : MdForm
 {
     // validation actions
     private readonly Dictionary<Control, Func<string, bool>> _checkActions = new();
