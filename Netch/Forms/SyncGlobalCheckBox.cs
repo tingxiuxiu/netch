@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Netch.Ui;
 
 namespace Netch.Forms;
 
@@ -79,17 +80,26 @@ public class SyncGlobalCheckBox : CheckBox
         }
     }
 
+    internal void RefreshTheme()
+    {
+        OnSyncGlobalChanged();
+    }
+
     private void OnSyncGlobalChanged()
     {
         if (_syncGlobal)
         {
             Font = new Font(Font, FontStyle.Regular);
-            BackColor = SystemColors.Control;
+            BackColor = Color.Transparent;
+            ForeColor = MdColors.OnSurface;
+            FlatStyle = FlatStyle.System;
         }
         else
         {
             Font = new Font(Font, FontStyle.Bold | FontStyle.Italic);
-            BackColor = Color.Yellow;
+            BackColor = MdColors.TertiaryContainer;
+            ForeColor = MdColors.OnTertiaryContainer;
+            FlatStyle = FlatStyle.Flat;
         }
     }
 }

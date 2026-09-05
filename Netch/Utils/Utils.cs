@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using MaxMind.GeoIP2;
 using Microsoft.Win32.TaskScheduler;
+using Netch.Ui;
 using Task = System.Threading.Tasks.Task;
 
 namespace Netch.Utils;
@@ -128,7 +129,8 @@ public static class Utils
     {
         if (sender is ComboBox cbx)
         {
-            e.DrawBackground();
+            var selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+            MdTheme.DrawComboItemBackground(e.Graphics, e.Bounds, selected);
 
             if (e.Index < 0)
                 return;
@@ -137,7 +139,7 @@ public static class Utils
                 cbx.Items[e.Index].ToString(),
                 cbx.Font,
                 e.Bounds,
-                (e.State & DrawItemState.Selected) == DrawItemState.Selected ? SystemColors.HighlightText : cbx.ForeColor,
+                selected ? MdColors.OnSecondaryContainer : cbx.ForeColor,
                 TextFormatFlags.HorizontalCenter);
         }
     }
