@@ -9,6 +9,7 @@ CreateUnicastIpAddressEntry
 GetUnicastIpAddressEntry
 NotifyUnicastIpAddressChange
 CancelMibChangeNotify2
+NTSTATUS
 
 // User32.dll
 SetWindowPos
