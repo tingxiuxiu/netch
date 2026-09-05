@@ -19,7 +19,7 @@ namespace Netch;
 
 public static class Program
 {
-    public static readonly ISingleInstanceService SingleInstance = new SingleInstanceService($"Global\\{nameof(Netch)}");
+    public static readonly SingleInstanceService SingleInstance = new($"Global\\{nameof(Netch)}");
 
     internal static HWND ConsoleHwnd { get; private set; }
 
@@ -63,14 +63,14 @@ public static class Program
         Configuration.LoadAsync().Wait();
 
         // check if the program is already running
-        if (!SingleInstance.TryStartSingleInstance())
+        if (!SingleInstance.IsFirstInstance)
         {
-            SingleInstance.SendMessageToFirstInstanceAsync(Constants.Parameter.Show).GetAwaiter().GetResult();
+            SingleInstance.SendMessageAsync((int)SingleInstanceCommand.Show).GetAwaiter().GetResult();
             Environment.Exit(0);
             return;
         }
 
-        SingleInstance.Received.Subscribe(SingleInstance_ArgumentsReceived);
+        SingleInstance.StartListening(OnSingleInstanceCommand);
 
         // clean up old logs
         if (Directory.Exists("logging"))
@@ -200,14 +200,14 @@ public static class Program
         Log.CloseAndFlush();
     }
 
-    private static void SingleInstance_ArgumentsReceived((string, Action<string>) receive)
+    private static void OnSingleInstanceCommand(int command)
     {
-        var (arg, endFunc) = receive;
-        if (arg == Constants.Parameter.Show)
-        {
+        if (command == (int)SingleInstanceCommand.Show)
             Utils.Utils.ActivateVisibleWindows();
-        }
-
-        endFunc(string.Empty);
     }
+}
+
+internal enum SingleInstanceCommand
+{
+    Show = 1
 }

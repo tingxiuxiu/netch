@@ -35,8 +35,8 @@ public static class Socks5ServerTestUtils
             return new NatTypeTestResult { Result = "Wrong STUN Server!" };
         }
 
-        using IUdpProxy proxy = ProxyFactory.CreateProxy(ProxyType.Socks5, new IPEndPoint(IPAddress.Loopback, 0), socks5Option);
-        using var client = new StunClient5389UDP(new IPEndPoint(ip, port), local, proxy);
+        await using IUdpProxy proxy = ProxyFactory.CreateProxy(STUN.Enums.TransportType.Udp, ProxyType.Socks5, new IPEndPoint(IPAddress.Loopback, 0), socks5Option, stunServer, false);
+        await using var client = new StunClient5389UDP(new IPEndPoint(ip, port), local, proxy);
 
         await client.ConnectProxyAsync(ctx);
         try
@@ -95,7 +95,7 @@ public static class Socks5ServerTestUtils
 
         var stopwatch = Stopwatch.StartNew();
 
-        var result = await Socks5.Utils.Socks5TestUtils.Socks5ConnectAsync(socks5Option, token: ctx);
+        var result = await Socks5.Utils.Socks5TestUtils.Socks5ConnectAsync(socks5Option, "www.google.com", "/generate_204", 80, ctx);
 
         stopwatch.Stop();
         if (result)
